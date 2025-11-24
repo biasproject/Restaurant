@@ -1,0 +1,41 @@
+{
+  "Pizza": [
+    {
+      "blat": "Pufos",
+      "sos": "Rosii",
+      "areExtraMozzarella": true,
+      "areCiuperci": false,
+      "areSalam": true,
+      "areAnanas": false,
+      "nume": "Pizza Custom",
+      "pret": 26.0,
+      "categorie": "Pizza"
+    }
+  ],
+  "Bautura non-alcoolica": [
+    {
+      "volume": 250.0,
+      "nume": "Limonada",
+      "pret": 18.0,
+      "categorie": "Bautura non-alcoolica"
+    }
+  ],
+  "Fel principal": [
+    {
+      "grmaj": 350.0,
+      "esteVegetarian": false,
+      "nume": "Friptura de vita",
+      "pret": 115.0,
+      "categorie": "Fel principal"
+    }
+  ],
+  "Aperitive": [
+    {
+      "grmaj": 250.0,
+      "esteVegetarian": true,
+      "nume": "Hummus",
+      "pret": 32.0,
+      "categorie": "Aperitive"
+    }
+  ]
+}
