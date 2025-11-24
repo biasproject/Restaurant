@@ -9,7 +9,6 @@ import java.util.List;
 public class Comanda {
 
 
-    private static final double TVA = 0.09;
     private List<ProdusComandat> produseComandate;
 
 
@@ -33,7 +32,7 @@ public class Comanda {
     }
 
 
-    public void afiseazaTotal() {
+    public void afiseazaTotal(double cotaTVA) {
         double subtotal = 0;
         System.out.println("----------- BON FISCAL -----------");
         for (ProdusComandat pc : produseComandate) {
@@ -54,10 +53,10 @@ public class Comanda {
         }
 
         double totalInainteDeTVA = subtotal - valoareReducere;
-        double valoareTVA = totalInainteDeTVA * TVA;
+        double valoareTVA = totalInainteDeTVA * cotaTVA;
         double totalFinal = totalInainteDeTVA + valoareTVA;
 
-        System.out.printf("TVA (%.0f%%): %.2f RON%n", TVA * 100, valoareTVA);
+        System.out.printf("TVA (%.0f%%): %.2f RON%n", cotaTVA * 100, valoareTVA);
         System.out.println("==================================");
         System.out.printf("TOTAL DE PLATA: %.2f RON%n", totalFinal);
         System.out.println("==================================");
