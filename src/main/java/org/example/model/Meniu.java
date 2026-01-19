@@ -1,4 +1,4 @@
-package org.example;
+package org.example.model;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -53,7 +53,7 @@ public class Meniu {
         return produse.getOrDefault(categorie, new ArrayList<>());
     }
 
-    private List<Produs> getToateProdusele()
+    public List<Produs> getToateProdusele()
     {
         return produse.values().stream().flatMap(List::stream).collect(Collectors.toList());
     }

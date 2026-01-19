@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<VBox spacing="10.0" alignment="CENTER" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.controller.OspatarTableSelectController">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20" />
+    </padding>
+    <Label text="Selectați masa" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+    <ChoiceBox fx:id="tableChoice" prefWidth="120" />
+    <Label fx:id="infoLabel" text="" />
+    <Button text="Continuă" onAction="#handleContinue" />
+</VBox>

@@ -1,16 +1,20 @@
-package org.example;
+package org.example.model;
 
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+
+@Entity
+@DiscriminatorValue("PIZZA")
 public final class Pizza extends Produs {
-    // --- Partea 1: Clasa principala (deja scrisa de tine si corectata) ---
-    private final String blat;
-    private final String sos;
+    private  String blat;
+    private  String sos;
 
-    private final boolean areExtraMozzarella;
-    private final boolean areCiuperci;
-    private final boolean areSalam;
-    private final boolean areAnanas;
+    private  boolean areExtraMozzarella;
+    private  boolean areCiuperci;
+    private  boolean areSalam;
+    private  boolean areAnanas;
 
-    private Pizza(String nume, double pret, String categorie,
+    public Pizza(String nume, double pret, String categorie,
                   String blat, String sos,
                   boolean areExtraMozzarella, boolean areCiuperci,
                   boolean areSalam, boolean areAnanas) {
@@ -22,8 +26,30 @@ public final class Pizza extends Produs {
         this.areSalam = areSalam;
         this.areAnanas = areAnanas;
     }
+    public Pizza()
+    {
 
-    // --- Partea 2: Metodele publice ale clasei Pizza (de adaugat) ---
+    }
+
+
+    public String getBlat() { return blat; }
+    public void setBlat(String blat) { this.blat = blat; }
+
+    public String getSos() { return sos; }
+    public void setSos(String sos) { this.sos = sos; }
+
+    public boolean isAreExtraMozzarella() { return areExtraMozzarella; }
+    public void setAreExtraMozzarella(boolean areExtraMozzarella) { this.areExtraMozzarella = areExtraMozzarella; }
+
+    public boolean isAreCiuperci() { return areCiuperci; }
+    public void setAreCiuperci(boolean areCiuperci) { this.areCiuperci = areCiuperci; }
+
+    public boolean isAreSalam() { return areSalam; }
+    public void setAreSalam(boolean areSalam) { this.areSalam = areSalam; }
+
+    public boolean isAreAnanas() { return areAnanas; }
+    public void setAreAnanas(boolean areAnanas) { this.areAnanas = areAnanas; }
+
     @Override
     public String obtineDetalii() {
         return "Pizza customizabila: " + getNume();
@@ -42,11 +68,8 @@ public final class Pizza extends Produs {
         System.out.println("---------------------------------");
     }
 
-    // --- Partea 3: Clasa Builder (de adaugat) ---
-    // Aceasta este o clasa definita IN INTERIORUL clasei Pizza
     public static class PizzaBuilder {
-        // Campurile builder-ului (NU sunt final)
-        private final String blat; // Blatul si sosul sunt obligatorii, deci le facem final si in builder
+        private final String blat;
         private final String sos;
 
         private boolean areExtraMozzarella = false;
@@ -54,22 +77,19 @@ public final class Pizza extends Produs {
         private boolean areSalam = false;
         private boolean areAnanas = false;
 
-        // Atributele produsului general
         private String nume = "Pizza Custom";
-        private double pretCurent = 15.0; // Pret de baza pentru blat si sos
+        private double pretCurent = 15.0;
         private String categorie = "Pizza";
 
-        // Constructorul builder-ului cere elementele OBLIGATORII
         public PizzaBuilder(String blat, String sos) {
             this.blat = blat;
             this.sos = sos;
         }
 
-        // Metode pentru fiecare topping OPTIONAL
-        // Fiecare metoda returneaza 'this' pentru a permite inlantuirea
+
         public PizzaBuilder withExtraMozzarella() {
             this.areExtraMozzarella = true;
-            this.pretCurent += 5.0; // Adaugam costul topping-ului la pret
+            this.pretCurent += 5.0;
             return this;
         }
 
@@ -91,10 +111,7 @@ public final class Pizza extends Produs {
             return this;
         }
 
-        // Metoda finala care CONSTRUIESTE obiectul Pizza
         public Pizza build() {
-            // Apeleaza constructorul privat al clasei Pizza,
-            // folosind toate datele adunate in builder
             return new Pizza(nume, pretCurent, categorie,
                     blat, sos,
                     areExtraMozzarella, areCiuperci, areSalam, areAnanas);
