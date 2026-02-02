@@ -1,0 +1,77 @@
+{
+  "Aperitive": [
+    {
+      "nume": "Hummus",
+      "pret": 32.0,
+      "categorie": "Aperitive",
+      "gramaj": 250.0,
+      "esteVegetarian": true
+    },
+    {
+      "nume": "Hummus",
+      "pret": 32.0,
+      "categorie": "Aperitive",
+      "gramaj": 250.0,
+      "esteVegetarian": true
+    },
+    {
+      "nume": "Hummus",
+      "pret": 32.0,
+      "categorie": "Aperitive",
+      "gramaj": 250.0,
+      "esteVegetarian": true
+    },
+    {
+      "nume": "Hummus",
+      "pret": 32.0,
+      "categorie": "Aperitive",
+      "gramaj": 250.0,
+      "esteVegetarian": true
+    }
+  ],
+  "Fel Principal": [
+    {
+      "nume": "Friptură de vită",
+      "pret": 115.0,
+      "categorie": "Fel Principal",
+      "gramaj": 350.0,
+      "esteVegetarian": false
+    }
+  ],
+  "Salate": [
+    {
+      "nume": "Salată Caesar",
+      "pret": 35.0,
+      "categorie": "Salate",
+      "gramaj": 350.0,
+      "esteVegetarian": true
+    }
+  ],
+  "Băuturi": [
+    {
+      "nume": "Limonadă",
+      "pret": 18.0,
+      "categorie": "Băuturi",
+      "volume": 350.0
+    },
+    {
+      "nume": "Apă Plată",
+      "pret": 10.0,
+      "categorie": "Băuturi",
+      "volume": 500.0
+    }
+  ],
+  "Pizza": [
+    {
+      "nume": "Pizza Custom",
+      "pret": 26.0,
+      "categorie": "Pizza",
+      "blat": "Pufos",
+      "sos": "Rosii",
+      "areExtraMozzarella": true,
+      "areCiuperci": false,
+      "areSalam": true,
+      "areAnanas": false
+    }
+  ]
+}
