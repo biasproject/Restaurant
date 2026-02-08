@@ -10,17 +10,13 @@ import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-/**
- * Aceasta este clasa principală care pornește întreaga aplicație JavaFX.
- * Singurul ei rol este să încarce și să afișeze fereastra de login.
- */
+
 public class RestaurantApp extends Application {
 
     public static ExecutorService executor = Executors.newFixedThreadPool(2);
     @Override
     public void start(Stage primaryStage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(RestaurantApp.class.getResource("/org/example/gui/LoginView.fxml"));
-        // Creăm "scena" și setăm dimensiunile ferestrei
         Scene scene = new Scene(fxmlLoader.load(), 350, 250);
 
         primaryStage.setTitle("Autentificare - Restaurant 'La Andrei'");
@@ -31,11 +27,10 @@ public class RestaurantApp extends Application {
     @Override
     public void stop() throws Exception {
         super.stop();
-        executor.shutdownNow(); // Oprim toate firele de execuție
+        executor.shutdownNow();
     }
 
     public static void main(String[] args) {
-        // Această metodă lansează aplicația JavaFX
         launch(args);
     }
 }

@@ -1,11 +1,11 @@
 package org.example.model;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException; // Importam eroarea specifica pentru JSON
-import java.io.FileNotFoundException; // Importam eroarea specifica pentru fisier lipsa
+import com.google.gson.JsonSyntaxException;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Optional; // Vom returna un Optional
+import java.util.Optional;
 
 public class IncarcatorConfiguratie {
 

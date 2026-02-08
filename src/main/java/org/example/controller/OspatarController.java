@@ -25,7 +25,6 @@ public class OspatarController {
     @FXML private Label reduceriLabel;
     @FXML private Label totalLabel;
 
-    // --- Date și servicii ---
     private ProdusRepository produsRepository;
     private ComandaRepository comandaRepository;
     private User ospatarCurent;
@@ -35,10 +34,7 @@ public class OspatarController {
     private ObservableList<ComandaItem> itemsComandaAfisate;
     private OfferService offerService;
 
-    /**
-     * Aceasta NU este o metodă FXML. Va fi chemată manual din LoginController
-     * pentru a trimite datele necesare (cine e logat și la ce masă).
-     */
+
     public void initData(User ospatar, int numarMasa) {
         this.ospatarCurent = ospatar;
         this.masaCurenta = numarMasa;
@@ -46,7 +42,6 @@ public class OspatarController {
         numeOspatarLabel.setText(ospatar.getUsername());
         numarMasaLabel.setText(String.valueOf(numarMasa));
 
-        // Creăm o nouă comandă goală pentru această masă
         this.comandaCurenta = new Comanda(numarMasa, ospatarCurent);
     }
 
@@ -55,13 +50,11 @@ public class OspatarController {
         produsRepository = new ProdusRepository();
         comandaRepository = new ComandaRepository();
 
-        // --- Setup Meniu (partea stângă) ---
         meniuNumeColumn.setCellValueFactory(new PropertyValueFactory<>("nume"));
         meniuCategorieColumn.setCellValueFactory(new PropertyValueFactory<>("categorie"));
         meniuPretColumn.setCellValueFactory(new PropertyValueFactory<>("pret"));
         meniuTableView.setItems(FXCollections.observableArrayList(produsRepository.gasesteTot()));
 
-        // --- Setup Comanda (partea dreaptă) ---
         comandaNumeColumn.setCellValueFactory(new PropertyValueFactory<>("numeProdusLaVanzare"));
         comandaCantitateColumn.setCellValueFactory(new PropertyValueFactory<>("cantitate"));
         comandaPretColumn.setCellValueFactory(new PropertyValueFactory<>("pretLaVanzare")); // Vom calcula subtotalul
@@ -82,11 +75,9 @@ public class OspatarController {
 
         int cantitate = cantitateSpinner.getValue();
 
-        // Adăugăm un item nou în obiectul Comanda
         ComandaItem newItem = new ComandaItem(produsSelectat, cantitate, comandaCurenta);
         comandaCurenta.getItems().add(newItem);
 
-        // Actualizăm UI-ul
         actualizeazaCosUI();
     }
 
@@ -98,7 +89,6 @@ public class OspatarController {
             subtotal += item.getPretLaVanzare() * item.getCantitate();
         }
 
-        // TODO: Aici vom chema motorul de oferte
         double valoareReduceri = offerService.aplicaOferte(comandaCurenta);
 
         double total = subtotal - valoareReduceri;
@@ -124,7 +114,6 @@ public class OspatarController {
 
         showAlert(Alert.AlertType.INFORMATION, "Succes", "Comanda pentru masa " + masaCurenta + " a fost finalizată și salvată!");
 
-        // TODO: Închide fereastra și revino la ecranul de selecție mese
     }
 
     private void showAlert(Alert.AlertType type, String title, String message) {

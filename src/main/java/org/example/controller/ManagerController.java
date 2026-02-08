@@ -27,31 +27,26 @@ import org.example.gui.RestaurantApp; // import pentru executor și resurse
 
 public class ManagerController {
 
-    // --- Repositories (Departamentele de logistică) ---
     private ProdusRepository produsRepository;
     private UserRepository userRepository;
 
-    // --- Tab 1: Gestiune Meniu ---
     @FXML private TableView<Produs> meniuTableView;
     @FXML private TableColumn<Produs, String> meniuNumeColumn;
     @FXML private TableColumn<Produs, String> meniuCategorieColumn;
     @FXML private TableColumn<Produs, Float> meniuPretColumn;
     private ObservableList<Produs> produseAfisate;
 
-    // --- Tab 2: Gestiune Personal ---
     @FXML private TableView<User> personalTableView;
     @FXML private TableColumn<User, String> personalUsernameColumn;
     @FXML private TableColumn<User, UserRole> personalRolColumn;
     private ObservableList<User> personalAfisat;
 
-    // --- Tab 3: Gestiune Oferte (momentan doar UI) ---
     @FXML private CheckBox happyHourCheck;
     @FXML private CheckBox mealDealCheck;
     @FXML private CheckBox partyPackCheck;
 
     @FXML private ProgressIndicator loadingIndicator; // added field
 
-    // --- Tab 4: Istoric Global ---
     @FXML private TableView<Comanda> comenziTable;
     @FXML private TableColumn<Comanda, Integer> colComId;
     @FXML private TableColumn<Comanda, String> colComUser;
@@ -77,25 +72,20 @@ public class ManagerController {
         partyPackCheck.setSelected(offerManager.isPartyPackActive());
     }
 
-    // ========================================================================
-    // LOGICA PENTRU GESTIUNE MENIU
-    // ========================================================================
+
     private void setupMeniuTab() {
         meniuNumeColumn.setCellValueFactory(new PropertyValueFactory<>("nume"));
         meniuCategorieColumn.setCellValueFactory(new PropertyValueFactory<>("categorie"));
         meniuPretColumn.setCellValueFactory(new PropertyValueFactory<>("pret"));
 
-        // Initial load async
         reloadMenuAsync();
     }
 
     private void incarcaDateMeniu() {
-        // kept for backward compatibility but prefer reloadMenuAsync
         produseAfisate = FXCollections.observableArrayList(produsRepository.gasesteTot());
         meniuTableView.setItems(produseAfisate);
     }
 
-    // New: load products asynchronously and update UI
     private void reloadMenuAsync() {
         Task<List<Produs>> task = new Task<>() {
             @Override
@@ -126,7 +116,6 @@ public class ManagerController {
     private void handleAdaugaProdus() {
         Produs rezultat = showProdusDialog(null);
         if (rezultat != null) {
-            // immediate UI feedback: add locally
             if (produseAfisate == null) produseAfisate = FXCollections.observableArrayList();
             produseAfisate.add(rezultat);
             Platform.runLater(() -> { meniuTableView.setItems(produseAfisate); meniuTableView.refresh(); });
@@ -141,14 +130,12 @@ public class ManagerController {
             task.setOnRunning(e -> loadingIndicator.setVisible(true));
             task.setOnSucceeded(e -> {
                 loadingIndicator.setVisible(false);
-                // reload to get DB-assigned id and consistent state
                 reloadMenuAsync();
                 showAlert(Alert.AlertType.INFORMATION, "Succes", "Produsul a fost adăugat cu succes.");
             });
             task.setOnFailed(e -> {
                 loadingIndicator.setVisible(false);
                 Throwable ex = task.getException();
-                // keep local addition but inform user
                 if (ex instanceof Exception) showExceptionAlert((Exception) ex, "Eroare la salvare produs — s-a păstrat local");
             });
             RestaurantApp.executor.submit(task);
@@ -165,7 +152,6 @@ public class ManagerController {
 
         Produs rezultat = showProdusDialog(selectat);
         if (rezultat != null) {
-            // immediate UI update
             if (produseAfisate == null) produseAfisate = FXCollections.observableArrayList();
             boolean replaced = false;
             for (int i = 0; i < produseAfisate.size(); i++) {
@@ -188,14 +174,12 @@ public class ManagerController {
             task.setOnRunning(e -> loadingIndicator.setVisible(true));
             task.setOnSucceeded(e -> {
                 loadingIndicator.setVisible(false);
-                // reload to ensure DB consistency
                 reloadMenuAsync();
                 showAlert(Alert.AlertType.INFORMATION, "Succes", "Produsul a fost actualizat.");
             });
             task.setOnFailed(e -> {
                 loadingIndicator.setVisible(false);
                 Throwable ex = task.getException();
-                // inform user and keep local change
                 if (ex instanceof Exception) showExceptionAlert((Exception) ex, "Eroare la actualizare produs — s-a păstrat local");
             });
             RestaurantApp.executor.submit(task);
@@ -216,7 +200,6 @@ public class ManagerController {
         Optional<ButtonType> rez = confirm.showAndWait();
         if (!(rez.isPresent() && rez.get() == ButtonType.OK)) return;
 
-        // immediate UI removal
         if (produseAfisate != null) produseAfisate.removeIf(p -> p.getId() == selectat.getId());
         Platform.runLater(() -> { meniuTableView.getItems().removeIf(p -> p.getId() == selectat.getId()); meniuTableView.refresh(); });
 
@@ -230,21 +213,18 @@ public class ManagerController {
         task.setOnRunning(e -> loadingIndicator.setVisible(true));
         task.setOnSucceeded(e -> {
             loadingIndicator.setVisible(false);
-            // reload to ensure DB consistency
             reloadMenuAsync();
             showAlert(Alert.AlertType.INFORMATION, "Șters", "Produsul a fost șters cu succes.");
         });
         task.setOnFailed(e -> {
             loadingIndicator.setVisible(false);
             Throwable ex = task.getException();
-            // rollback local removal by reloading
             reloadMenuAsync();
             if (ex instanceof Exception) showExceptionAlert((Exception) ex, "Eroare la ștergerea produsului — rollback efectuat");
         });
         RestaurantApp.executor.submit(task);
     }
 
-    // --- helper to show exception details in an Alert ---
     private void showExceptionAlert(Exception e, String title) {
         e.printStackTrace();
         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -267,26 +247,21 @@ public class ManagerController {
         alert.showAndWait();
     }
 
-    // Helper: dialog pentru creare / editare produs
     private Produs showProdusDialog(Produs existing) {
         Dialog<Produs> dialog = new Dialog<>();
-        // set owner to main window so dialog is modal and in front
         Window owner = meniuTableView != null && meniuTableView.getScene() != null ? meniuTableView.getScene().getWindow() : null;
         if (owner != null) dialog.initOwner(owner);
 
         dialog.setTitle(existing == null ? "Adaugă produs" : "Modifică produs");
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
-        // Fields comune
         TextField numeField = new TextField();
         TextField pretField = new TextField();
         TextField categorieField = new TextField();
 
-        // Tipuri specifice: choice
         ChoiceBox<String> tipBox = new ChoiceBox<>(FXCollections.observableArrayList("Pizza", "Mancare", "Bautura"));
         tipBox.setValue("Mancare");
 
-        // Specific fields
         TextField blatField = new TextField();
         TextField sosField = new TextField();
         CheckBox extraMozzCheck = new CheckBox("Extra mozzarella");
@@ -299,7 +274,6 @@ public class ManagerController {
 
         TextField volumeField = new TextField();
 
-        // Populate if edit
         if (existing != null) {
             numeField.setText(existing.getNume());
             pretField.setText(String.valueOf(existing.getPret()));
@@ -325,7 +299,6 @@ public class ManagerController {
             }
         }
 
-        // Layout in dialog (simple vertical box)
         VBox content = new VBox(8);
         content.getChildren().addAll(new Label("Nume:"), numeField,
                 new Label("Pret:"), pretField,
@@ -339,7 +312,6 @@ public class ManagerController {
 
         dialog.getDialogPane().setContent(content);
 
-        // Convert result
         dialog.setResultConverter(button -> {
             if (button == ButtonType.OK) {
                 try {
@@ -373,7 +345,7 @@ public class ManagerController {
                             return m;
                         }
                         return new Mancare(nume, pret, categorie, gramaj, veg);
-                    } else { // Bautura
+                    } else {
                         float vol = volumeField.getText().isEmpty() ? 0f : Float.parseFloat(volumeField.getText());
                         if (existing instanceof Bautura) {
                             Bautura b = (Bautura) existing;
@@ -463,9 +435,7 @@ public class ManagerController {
     }
 
 
-    // ========================================================================
-    // LOGICA PENTRU GESTIUNE PERSONAL
-    // ========================================================================
+
     private void setupPersonalTab() {
         personalUsernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
         personalRolColumn.setCellValueFactory(new PropertyValueFactory<>("rol"));
@@ -475,48 +445,39 @@ public class ManagerController {
 
 
     private void incarcaDatePersonal() {
-        // Creăm o sarcină nouă (Task) care va rula în fundal
         Task<List<User>> loadUsersTask = new Task<>() {
             @Override
             protected List<User> call() throws Exception {
-                // Aceasta este munca grea. Rulează pe un fir de fundal.
-                // NU avem voie să atingem interfața grafică de aici!
                 return userRepository.findAll();
             }
         };
 
-        // Ce se întâmplă CÂND sarcina pornește
         loadUsersTask.setOnRunning(event -> {
-            loadingIndicator.setVisible(true); // Afișăm cerculețul de încărcare
+            loadingIndicator.setVisible(true);
         });
 
-        // Ce se întâmplă CÂND sarcina se termină cu SUCCES
         loadUsersTask.setOnSucceeded(event -> {
-            loadingIndicator.setVisible(false); // Ascundem cerculețul
+            loadingIndicator.setVisible(false);
             personalAfisat = FXCollections.observableArrayList(loadUsersTask.getValue());
             personalTableView.setItems(personalAfisat);
         });
 
-        // Ce se întâmplă CÂND sarcina EȘUEAZĂ
         loadUsersTask.setOnFailed(event -> {
             loadingIndicator.setVisible(false);
             showAlert(Alert.AlertType.ERROR, "Eroare", "Nu s-au putut încărca datele personalului.");
             loadUsersTask.getException().printStackTrace();
         });
 
-        // Pornim sarcina pe un fir de execuție din "echipa" noastră
         RestaurantApp.executor.submit(loadUsersTask);
     }
 
     @FXML
     private void handleAdaugaPersonal() {
-        // TODO: Deschide o fereastră nouă pentru a adăuga un user (ospătar)
         showAlert(Alert.AlertType.INFORMATION, "Info", "Funcționalitate în construcție!");
     }
 
     @FXML
     private void handleModificaPersonal() {
-        // TODO: Deschide o fereastră nouă pentru a modifica user-ul selectat
         showAlert(Alert.AlertType.INFORMATION, "Info", "Funcționalitate în construcție!");
     }
 
@@ -528,7 +489,6 @@ public class ManagerController {
             return;
         }
 
-        // Aici implementăm confirmarea critică cerută în barem
         Alert alertConfirmare = new Alert(Alert.AlertType.CONFIRMATION);
         alertConfirmare.setTitle("Confirmare Concediere");
         alertConfirmare.setHeaderText("Sunteți sigur că doriți să concediați angajatul '" + userSelectat.getUsername() + "'?");
@@ -536,11 +496,9 @@ public class ManagerController {
 
         Optional<ButtonType> rezultat = alertConfirmare.showAndWait();
         if (rezultat.isPresent() && rezultat.get() == ButtonType.OK) {
-            // Utilizatorul a confirmat ștergerea
             try {
                 userRepository.delete(userSelectat);
                 showAlert(Alert.AlertType.INFORMATION, "Succes", "Angajatul a fost concediat.");
-                // Reîncărcăm lista pentru a reflecta schimbarea
                 incarcaDatePersonal();
             } catch (Exception e) {
                 showAlert(Alert.AlertType.ERROR, "Eroare DB", "A apărut o eroare la ștergerea din baza de date.");
@@ -559,9 +517,7 @@ public class ManagerController {
         stage.show();
     }
 
-    // ========================================================================
-    // LOGICA PENTRU GESTIUNE OFERTE
-    // ========================================================================
+
     @FXML
     private void handleSalveazaOferte() {
         OfferManager offerManager = OfferManager.getInstance();
@@ -613,7 +569,6 @@ public class ManagerController {
     }
 
 
-    // --- Metodă ajutătoare ---
     private void showAlert(Alert.AlertType type, String title, String message) {
         Alert alert = new Alert(type);
         alert.setTitle(title);

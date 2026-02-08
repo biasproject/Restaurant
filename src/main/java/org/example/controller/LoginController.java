@@ -30,7 +30,7 @@ public class LoginController {
     }
 
     @FXML
-    private void handleLogin() throws IOException { // Adaugă 'throws IOException'
+    private void handleLogin() throws IOException {
         String username = usernameField.getText();
         String password = passwordField.getText();
 
@@ -44,11 +44,9 @@ public class LoginController {
         if (userOptional.isPresent()) {
             User user = userOptional.get();
             if (user.getPassword().equals(password)) {
-                // Autentificare reușită!
                 if (user.getRol() == UserRole.ADMIN) {
                     schimbaScena("/org/example/gui/ManagerView.fxml", "Panou Administrator");
                 } else if (user.getRol() == UserRole.STAFF) {
-                    // Open table selection first
                     FXMLLoader fxmlLoader = new FXMLLoader(RestaurantApp.class.getResource("/org/example/gui/TableSelectView.fxml"));
                     Stage stage = (Stage) usernameField.getScene().getWindow();
                     stage.setScene(new Scene(fxmlLoader.load()));
@@ -67,7 +65,7 @@ public class LoginController {
         }
     }
     @FXML
-    private void handleGuestLogin() throws IOException { // Adaugă 'throws IOException'
+    private void handleGuestLogin() throws IOException {
         schimbaScena("/org/example/gui/GuestView.fxml", "Meniu Restaurant - Mod Client");
     }
 
@@ -83,8 +81,8 @@ public class LoginController {
 
     private void schimbaScena(String fxmlPath, String title) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(RestaurantApp.class.getResource(fxmlPath));
-        Stage stage = (Stage) usernameField.getScene().getWindow(); // Obținem fereastra existentă!
-        stage.setScene(new Scene(fxmlLoader.load())); // Doar schimbăm conținutul
+        Stage stage = (Stage) usernameField.getScene().getWindow();
+        stage.setScene(new Scene(fxmlLoader.load()));
         stage.setTitle(title);
         stage.show();
     }

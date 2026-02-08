@@ -7,7 +7,6 @@ import java.util.List;
 
 public class ProdusRepository {
     public ProdusRepository() {
-        // use JPAUtil
     }
 
     public void salveaza(Produs produs)
@@ -25,7 +24,6 @@ public class ProdusRepository {
         }
     }
 
-    // New: update (merge) - returnează instanța managed
     public Produs update(Produs produs) {
         EntityManager em = JPAUtil.getEntityManager();
         try {
@@ -38,7 +36,6 @@ public class ProdusRepository {
         }
     }
 
-    // New: delete
     public void sterge(Produs produs) {
         EntityManager em = JPAUtil.getEntityManager();
         try {
@@ -51,7 +48,6 @@ public class ProdusRepository {
         }
     }
 
-    // New: find by id
     public Produs findById(int id) {
         EntityManager em = JPAUtil.getEntityManager();
         try {
@@ -65,8 +61,8 @@ public class ProdusRepository {
     public List<Produs> gasesteTot() {
         EntityManager em = JPAUtil.getEntityManager();
         try {
-            System.out.println("ProdusRepository: Se încarcă produsele... (așteptare 2 secunde)");
-            Thread.sleep(2000); // SIMULARE ÎNTÂRZIERE
+            System.out.println("ProdusRepository: Se încarcă produsele...");
+            Thread.sleep(2000);
             return em.createQuery("SELECT p FROM Produs p", Produs.class).getResultList();
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
@@ -78,6 +74,5 @@ public class ProdusRepository {
 
     public void close()
     {
-        // JPAUtil handles EMF lifecycle
     }
 }

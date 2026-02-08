@@ -15,7 +15,6 @@
 <?import javafx.scene.control.ProgressIndicator?>
 <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.controller.ManagerController">
     <tabs>
-        <!-- TAB 1: Gestiune Meniu -->
         <Tab text="Gestiune Meniu">
             <content>
                 <BorderPane prefHeight="200.0" prefWidth="200.0">
@@ -63,7 +62,6 @@
             </content>
         </Tab>
 
-        <!-- TAB 2: Gestiune Personal (rămâne neschimbat) -->
         <Tab text="Gestiune Personal">
             <content>
                 <BorderPane prefHeight="200.0" prefWidth="200.0">
@@ -88,7 +86,6 @@
             </content>
         </Tab>
 
-        <!-- TAB 3: Gestiune Oferte -->
         <Tab text="Gestiune Oferte">
             <content>
                 <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0">
@@ -110,7 +107,6 @@
             </content>
         </Tab>
 
-        <!-- TAB 4: Istoric Global -->
         <Tab text="Istoric Global">
             <content>
                 <BorderPane>

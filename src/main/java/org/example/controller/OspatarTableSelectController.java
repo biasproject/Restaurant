@@ -23,7 +23,6 @@ public class OspatarTableSelectController {
 
     public void initData(User user) {
         this.currentUser = user;
-        // populate tables 1..12 (example)
         if (tableChoice != null) {
             tableChoice.getItems().clear();
             for (int i = 1; i <= 12; i++) tableChoice.getItems().add(i);
@@ -38,20 +37,17 @@ public class OspatarTableSelectController {
         if (selected == null) selected = 1;
 
         try {
-            // load ospatar main view and pass data
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/gui/OspatarView.fxml"));
             Stage stage = (Stage) tableChoice.getScene().getWindow();
             Scene scene = new Scene(loader.load());
             stage.setScene(scene);
 
-            // initialize target controller
             OspatarController controller = loader.getController();
             controller.initData(currentUser, selected);
 
             stage.setTitle("Ecran Ospătar - Masa " + selected);
             stage.show();
         } catch (Exception ex) {
-            // Show detailed error to the user and prevent crash
             ex.printStackTrace();
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Eroare la deschiderea ecranului ospătar");

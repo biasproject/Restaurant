@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "users") // Folosim "users" pentru că "user" e adesea un cuvânt cheie în SQL
+@Table(name = "users")
 public class User {
 
     @Id
@@ -18,18 +18,13 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Enumerated(EnumType.STRING) // Stocăm rolul ca text ("STAFF", "ADMIN")
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private UserRole rol;
 
-    // Un User (ospătar) poate avea mai multe Comenzi.
-    // CascadeType.ALL: Dacă ștergem un User, ștergem automat și toate comenzile lui.
-    // orphanRemoval=true: Dacă scoatem o comandă din lista asta, ea va fi ștearsă din DB.
-    // mappedBy: Spune JPA că relația este "deținută" de câmpul 'user' din clasa Comanda.
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Comanda> comenzi = new ArrayList<>();
 
-    // Constructori
     public User() {}
 
     public User(String username, String password, UserRole rol) {
@@ -38,7 +33,6 @@ public class User {
         this.rol = rol;
     }
 
-    // Getteri și Setteri
     public int getId() {
         return id;
     }
@@ -81,6 +75,6 @@ public class User {
 
     @Override
     public String toString() {
-        return username; // Util pentru afișare în tabele
+        return username;
     }
 }

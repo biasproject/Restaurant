@@ -37,7 +37,6 @@
     <center>
         <SplitPane dividerPositions="0.6" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
             <items>
-                <!-- Partea Stângă: Meniu și Adăugare -->
                 <BorderPane>
                     <center>
                         <TableView fx:id="meniuTableView">
@@ -63,7 +62,6 @@
                 </BorderPane>
             </items>
             <items>
-                <!-- Partea Dreaptă: Comanda Curentă -->
                 <BorderPane>
                     <top>
                         <Label text="Comanda Curentă" BorderPane.alignment="CENTER_LEFT">

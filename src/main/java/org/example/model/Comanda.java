@@ -20,16 +20,13 @@ public class Comanda {
     private double totalFinal;
     private boolean finalizata = false;
 
-    // O Comandă aparține unui singur User (ospătar).
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    // O Comandă conține o listă de itemi.
     @OneToMany(mappedBy = "comanda", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<ComandaItem> items = new ArrayList<>();
 
-    // Constructori
     public Comanda() {
         this.dataPlasare = LocalDateTime.now();
     }
@@ -40,7 +37,6 @@ public class Comanda {
         this.user = user;
     }
 
-    // Getteri și Setteri
     public int getId() {
         return id;
     }
@@ -113,17 +109,14 @@ public class Comanda {
         this.items = items;
     }
 
-    // Metode ajutătoare
     public void adaugaItem(Produs produs, int cantitate) {
         if (produs == null || cantitate <= 0) return;
-        // verificam daca exista deja un item pentru produs -> incrementam cantitatea
         for (ComandaItem item : items) {
             if (item.getProdus().getId() == produs.getId()) {
                 item.setCantitate(item.getCantitate() + cantitate);
                 return;
             }
         }
-        // altfel cream un nou item
         ComandaItem newItem = new ComandaItem(produs, cantitate, this);
         items.add(newItem);
     }
@@ -134,7 +127,6 @@ public class Comanda {
             sub += item.getPretLaVanzare() * item.getCantitate();
         }
         this.subtotal = sub;
-        // totalReduceri este calculat de OfferService; păstrăm valoarea curentă
         this.totalFinal = this.subtotal - this.totalReduceri;
     }
 }

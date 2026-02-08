@@ -10,25 +10,21 @@ public class ComandaItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    // Un item se referă la un singur Produs din meniu.
-    // FetchType.EAGER: Când încărcăm un item, vrem să vină și produsul asociat cu el.
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "produs_id", nullable = true)
     private Produs produs;
 
     private int cantitate;
 
-    // Stocăm prețul la momentul vânzării pentru a nu fi afectați de schimbări viitoare ale prețului în meniu
     private double pretLaVanzare;
 
-    private String numeProdusLaVanzare; // Stocăm și numele, util pentru afișare pe bonuri vechi
+    private String numeProdusLaVanzare;
 
-    // Un item aparține unei singure Comenzi.
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "comanda_id")
     private Comanda comanda;
 
-    // Constructori
     public ComandaItem() {}
 
     public ComandaItem(Produs produs, int cantitate, Comanda comanda) {
@@ -39,7 +35,6 @@ public class ComandaItem {
         this.comanda = comanda;
     }
 
-    // Getteri și Setteri
     public int getId() {
         return id;
     }

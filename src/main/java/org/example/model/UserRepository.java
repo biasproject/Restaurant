@@ -39,11 +39,10 @@ public class UserRepository {
         EntityManager em = JPAUtil.getEntityManager();
         try {
             em.getTransaction().begin();
-            // Trebuie să ne asigurăm că entitatea este "atașată" înainte de a o șterge
             if (!em.contains(user)) {
                 user = em.merge(user);
             }
-            em.remove(user); // Șterge user-ul (și comenzile lui, datorită CascadeType.ALL)
+            em.remove(user);
             em.getTransaction().commit();
         } finally {
             em.close();
@@ -57,7 +56,7 @@ public class UserRepository {
             query.setParameter("username", username);
             return Optional.of(query.getSingleResult());
         } catch (NoResultException e) {
-            return Optional.empty(); // Returnează un Optional gol dacă nu găsește user-ul
+            return Optional.empty();
         } finally {
             em.close();
         }
@@ -67,7 +66,7 @@ public class UserRepository {
         EntityManager em = JPAUtil.getEntityManager();
         try {
             System.out.println("UserRepository: Se încarcă userii... (așteptare 2 secunde)");
-            Thread.sleep(2000); // SIMULARE ÎNTÂRZIERE
+            Thread.sleep(2000);
             return em.createQuery("SELECT u FROM User u", User.class).getResultList();
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
@@ -78,6 +77,5 @@ public class UserRepository {
     }
 
     public void close() {
-        // Nothing to close here — JPAUtil manages the factory lifecycle
     }
 }

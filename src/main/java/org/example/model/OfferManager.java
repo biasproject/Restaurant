@@ -4,10 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * O clasă Singleton care ține minte starea ofertelor active.
- * Managerul va scrie aici, iar Serviciul de Oferte va citi de aici.
- */
+
 public class OfferManager {
 
     private static OfferManager instance;

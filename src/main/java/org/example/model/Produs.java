@@ -22,11 +22,9 @@ public abstract class Produs {
         this.categorie = categorie;
     }
 
-    // Constructorul gol este OBLIGATORIU pentru JPA
     protected Produs() {
     }
 
-    // Getteri și Setteri simpli și corecți
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
